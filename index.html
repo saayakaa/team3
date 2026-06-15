@@ -1,0 +1,52 @@
+<!doctype html>
+<html lang="ja">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>TODO 課題入力</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <main class="container">
+    <h1>推しTask — 課題入力</h1>
+
+    <form id="task-form">
+      <div class="field">
+        <label>タイトル
+          <input type="text" id="title" required placeholder="課題のタイトル">
+        </label>
+      </div>
+
+      <div class="field">
+        <label>詳細
+          <textarea id="description" placeholder=""></textarea>
+        </label>
+      </div>
+
+      <div class="field-row">
+        <label>期日
+          <input type="date" id="due">
+        </label>
+        <label>優先度
+          <select id="priority">
+            <option value="low">低</option>
+            <option value="medium" selected>中</option>
+            <option value="high">高</option>
+          </select>
+        </label>
+      </div>
+
+      <div class="actions">
+        <button type="submit">追加</button>
+        <button type="button" id="clear">クリア</button>
+      </div>
+    </form>
+
+    <section>
+      <h2>課題一覧</h2>
+      <ul id="task-list" class="task-list"></ul>
+    </section>
+  </main>
+  <script src="app.js"></script>
+</body>
+</html>
