@@ -4,20 +4,32 @@ body{
     font-family:sans-serif;
 }
 
-.container{
-    width:100%;
-    max-width:500px;
-    margin:auto;
-}
+
 
 .container{
     max-width:400px;
     margin:auto;        /*画面全体の中央よせ*/
-    padding:10px;
+    padding:30px;   /*pading: 上 左 右 下  の余白*/
 }
 
-h1{
-    text-align:center;
+.title-area{
+    display: flex;
+    justify-content: center;    /*タイトルを中央に寄せる*/
+    align-items: center;
+    position: relative;
+}
+
+/*推しTaskの文字の余白をリセットして中央に*/
+.title-area h1 {
+    margin: 0;
+}
+
+.setting-button{
+    position: absolute;
+    right: 0;
+    width:50px;
+    height:50px;
+    font-size:30px;
 }
 
 .oshi-image{
@@ -63,16 +75,18 @@ h1{
     margin-bottom:20px;
 }
 
-.footer{
-    display:flex;
+.function_button{
 
+    display:flex;
     justify-content:space-around;   /*均等に配置*/
+
 }
 
-.footer button{
-    width:70px;
+.function_button button{
+    width:100px;
     height:70px;
-
     font-size:30px;
+
+
 }
 
