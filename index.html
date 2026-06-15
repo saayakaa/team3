@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>推しTask</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=M+PLUS+Rounded+1c:wght@500;700&display=swap" rel="stylesheet">
+    <style>
+        body { font-family: 'M PLUS Rounded 1c', sans-serif; }
+    </style>
+</head>
+<body class="bg-pink-50 min-h-screen flex items-center justify-center p-4">
+
+    <div class="bg-white w-full max-w-md p-8 rounded-3xl shadow-lg border-4 border-pink-100">
+        
+        <h1 id="title" class="text-4xl font-bold text-pink-400 text-center mb-8">ログイン</h1>
+
+        <div id="login-form">
+            <input type="text" placeholder="ユーザー名" class="w-full p-4 mb-4 rounded-2xl bg-pink-50 border-2 border-pink-100 focus:outline-none focus:border-pink-300">
+            <input type="password" placeholder="パスワード" class="w-full p-4 mb-6 rounded-2xl bg-pink-50 border-2 border-pink-100 focus:outline-none focus:border-pink-300">
+            <button class="w-full bg-pink-400 text-white font-bold py-4 rounded-2xl hover:bg-pink-500 transition shadow-md">ログイン</button>
+            <p class="text-center mt-6 text-sm text-gray-400">
+                アカウントをお持ちでない方 <br>
+                <button onclick="switchForm('signup')" class="text-pink-400 font-bold underline mt-1">新規登録</button>
+            </p>
+        </div>
+
+        <div id="signup-form" class="hidden">
+            <input type="email" placeholder="メールアドレス" class="w-full p-4 mb-4 rounded-2xl bg-pink-50 border-2 border-pink-100 focus:outline-none focus:border-pink-300">
+            <input type="text" placeholder="ユーザー名" class="w-full p-4 mb-4 rounded-2xl bg-pink-50 border-2 border-pink-100 focus:outline-none focus:border-pink-300">
+            <input type="password" placeholder="パスワード" class="w-full p-4 mb-4 rounded-2xl bg-pink-50 border-2 border-pink-100 focus:outline-none focus:border-pink-300">
+            <input type="password" placeholder="パスワード（確認用）" class="w-full p-4 mb-6 rounded-2xl bg-pink-50 border-2 border-pink-100 focus:outline-none focus:border-pink-300">
+            
+            <button class="w-full bg-indigo-400 text-white font-bold py-4 rounded-2xl hover:bg-indigo-500 transition shadow-md">登録</button>
+            <p class="text-center mt-6 text-sm text-gray-400">
+                <button onclick="switchForm('login')" class="text-indigo-400 font-bold underline">ログイン画面に戻る</button>
+            </p>
+        </div>
+    </div>
+
+    <script>
+        function switchForm(type) {
+            const loginForm = document.getElementById('login-form');
+            const signupForm = document.getElementById('signup-form');
+            const title = document.getElementById('title');
+
+            if (type === 'signup') {
+                loginForm.classList.add('hidden');
+                signupForm.classList.remove('hidden');
+                title.innerText = '新規登録';
+                title.classList.replace('text-pink-400', 'text-indigo-400');
+            } else {
+                signupForm.classList.add('hidden');
+                loginForm.classList.remove('hidden');
+                title.innerText = 'ログイン';
+                title.classList.replace('text-indigo-400', 'text-pink-400');
+            }
+        }
+    </script>
+</body>
+</html>
