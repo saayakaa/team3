@@ -1,92 +1,123 @@
-body{
-    margin:0;
-    background:white;
-    font-family:sans-serif;
+body {
+    margin: 0;
+    /* 1・3枚目のような、ごく淡いピンク・パープル系の背景色に */
+    background: #fcf6f9; 
+    font-family: sans-serif;
+    color: #333333;
 }
 
-
-
-.container{
-    max-width:400px;
-    margin:auto;        /*画面全体の中央よせ*/
-    padding:30px;   /*pading: 上 左 右 下  の余白*/
+.container {
+    max-width: 450px; /* 1枚目のカード幅に少し近づける */
+    margin: 40px auto; /* 上下に少し余裕を持たせる */
+    padding: 30px;
+    
+    /* 1・3枚目のような、白くて角が丸い浮き出たカードを作成 */
+    background: #ffffff;
+    border-radius: 20px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05); /* 3枚目のような柔らかい影 */
 }
 
-.title-area{
+.title-area {
     display: flex;
-    justify-content: center;    /*タイトルを中央に寄せる*/
+    justify-content: center;
     align-items: center;
     position: relative;
+    margin-bottom: 25px;
 }
 
-/*推しTaskの文字の余白をリセットして中央に*/
 .title-area h1 {
     margin: 0;
+    font-size: 28px;
+    font-weight: bold;
 }
 
-.setting-button{
+.setting-button {
     position: absolute;
     right: 0;
-    width:50px;
-    height:50px;
-    font-size:30px;
+    width: 40px;
+    height: 40px;
+    font-size: 22px;
+    background: none;
+    border: none;
+    cursor: pointer;
 }
 
-.oshi-image{
-    width:200px;
-    height:200px;
+/* 「推し」の画像エリア */
+.oshi-image {
+    width: 180px;
+    height: 180px;
+    margin: 0 auto 30px auto;
+    
+    /* 黒枠を消し、薄いグレーの枠線と角丸に変更 */
+    border: 1px solid #ededed;
+    border-radius: 12px;
+    background-color: #fafafa;
 
-    margin:20px auto;
-
-    border:1px solid black;
-
-    display:flex;
-    justify-content:center;
-    align-items:center;
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }
 
-.level{
-    font-size:24px;
-    margin-bottom:10px;
+.level {
+    font-size: 20px;
+    font-weight: bold;
+    margin-bottom: 8px;
 }
 
-.exp-bar{
-    width:100%;
-    height:30px;
-
-    border:1px solid black;
-
-    margin-bottom:20px;
+/* 経験値バー */
+.exp-bar {
+    width: 100%;
+    height: 20px; /* 少しスタイリッシュに補足 */
+    background: #eeeeee; /* バーの背景をグレーに */
+    border: none; /* 黒枠を削除 */
+    border-radius: 10px; /* 丸みをつける */
+    overflow: hidden; /* 中身のピンクも一緒に丸める */
+    margin-bottom: 35px;
 }
 
-.exp-fill{
-    width:30%;
-    height:100%;
-
-    background:pink;
+.exp-fill {
+    width: 30%;
+    height: 100%;
+    /* 3枚目のログインボタンに近い、綺麗なピンク〜マゼンタ系に */
+    background: #e37cb1; 
 }
 
-.task-area{
-    height:200px;
-
-    border:1px solid black;
-    border-radius:15px;
-
-    margin-bottom:20px;
+/* やることエリアのタイトル */
+.container > h2 {
+    font-size: 22px;
+    margin: 0 0 15px 0;
 }
 
-.function_button{
-
-    display:flex;
-    justify-content:space-around;   /*均等に配置*/
-
+/* やることリストの枠 */
+.task-area {
+    height: 200px;
+    /* 黒枠ではなく、1枚目の入力欄のような薄いグレーの線に */
+    border: 1px solid #e0e0e0;
+    border-radius: 16px;
+    background-color: #ffffff;
+    margin-bottom: 30px;
 }
 
-.function_button button{
-    width:100px;
-    height:70px;
-    font-size:30px;
-
-
+/* 下部のボタンエリア */
+.function_button {
+    display: flex;
+    justify-content: space-around;
 }
 
+.function_button button {
+    width: 80px;
+    height: 60px;
+    font-size: 24px;
+    
+    /* ボタンの黒枠をなくし、1・3枚目のような淡いグレーの背景と角丸に */
+    background: #f0f2f5;
+    border: 1px solid #e4e6eb;
+    border-radius: 12px;
+    cursor: pointer;
+    transition: background 0.2s;
+}
+
+/* ボタンにマウスを乗せたときのふわっとしたエフェクト */
+.function_button button:hover {
+    background: #e4e6eb;
+}
