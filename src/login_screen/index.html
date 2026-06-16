@@ -1,8 +1,10 @@
 <!DOCTYPE html>
 <html lang="ja">
 <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>推しTask</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    
     <link rel="stylesheet" href="style.css">
 </head>
 <body class="bg-pink-50 min-h-screen flex flex-col items-center justify-center p-4">
@@ -13,9 +15,9 @@
         <h2 id="title" class="text-3xl font-bold text-pink-400 text-center mb-8">ログイン</h2>
 
         <div id="login-form">
-            <input type="text" placeholder="ユーザー名" class="w-full p-4 mb-4 rounded-2xl bg-pink-50 border-2 border-pink-100 focus:outline-none focus:border-pink-300">
-            <input type="password" placeholder="パスワード" class="w-full p-4 mb-6 rounded-2xl bg-pink-50 border-2 border-pink-100 focus:outline-none focus:border-pink-300">
-            <button class="w-full bg-pink-400 text-white font-bold py-4 rounded-2xl hover:bg-pink-500 transition shadow-md">ログイン</button>
+            <input type="email" id="login-email" placeholder="メールアドレス" class="w-full p-4 mb-4 rounded-2xl bg-pink-50 border-2 border-pink-100 focus:outline-none focus:border-pink-300">
+            <input type="password" id="login-password" placeholder="パスワード" class="w-full p-4 mb-6 rounded-2xl bg-pink-50 border-2 border-pink-100 focus:outline-none focus:border-pink-300">
+            <button id="login-btn" class="w-full bg-pink-400 text-white font-bold py-4 rounded-2xl hover:bg-pink-500 transition shadow-md">ログイン</button>
             <p class="text-center mt-6 text-sm text-gray-400">
                 アカウントをお持ちでない方 <br>
                 <button onclick="switchForm('signup')" class="text-pink-400 font-bold underline mt-1">新規登録</button>
@@ -23,12 +25,11 @@
         </div>
 
         <div id="signup-form" class="hidden">
-            <input type="email" placeholder="メールアドレス" class="w-full p-4 mb-4 rounded-2xl bg-pink-50 border-2 border-pink-100 focus:outline-none focus:border-pink-300">
-            <input type="text" placeholder="ユーザー名" class="w-full p-4 mb-4 rounded-2xl bg-pink-50 border-2 border-pink-100 focus:outline-none focus:border-pink-300">
-            <input type="password" placeholder="パスワード" class="w-full p-4 mb-4 rounded-2xl bg-pink-50 border-2 border-pink-100 focus:outline-none focus:border-pink-300">
-            <input type="password" placeholder="パスワード（確認用）" class="w-full p-4 mb-6 rounded-2xl bg-pink-50 border-2 border-pink-100 focus:outline-none focus:border-pink-300">
+            <input type="email" id="signup-email" placeholder="メールアドレス" class="w-full p-4 mb-4 rounded-2xl bg-pink-50 border-2 border-pink-100 focus:outline-none focus:border-pink-300">
+            <input type="password" id="signup-password" placeholder="パスワード" class="w-full p-4 mb-4 rounded-2xl bg-pink-50 border-2 border-pink-100 focus:outline-none focus:border-pink-300">
+            <input type="password" id="signup-confirm-password" placeholder="パスワード（確認用）" class="w-full p-4 mb-6 rounded-2xl bg-pink-50 border-2 border-pink-100 focus:outline-none focus:border-pink-300">
             
-            <button class="w-full bg-indigo-400 text-white font-bold py-4 rounded-2xl hover:bg-indigo-500 transition shadow-md">登録</button>
+            <button id="signup-btn" class="w-full bg-indigo-400 text-white font-bold py-4 rounded-2xl hover:bg-indigo-500 transition shadow-md">登録</button>
             <p class="text-center mt-6 text-sm text-gray-400">
                 <button onclick="switchForm('login')" class="text-indigo-400 font-bold underline">ログイン画面に戻る</button>
             </p>
@@ -40,18 +41,57 @@
             const loginForm = document.getElementById('login-form');
             const signupForm = document.getElementById('signup-form');
             const title = document.getElementById('title');
-
             if (type === 'signup') {
-                loginForm.classList.add('hidden');
-                signupForm.classList.remove('hidden');
-                title.innerText = '新規登録';
-                title.classList.replace('text-pink-400', 'text-indigo-400');
+                loginForm.classList.add('hidden'); signupForm.classList.remove('hidden');
+                title.innerText = '新規登録'; title.classList.replace('text-pink-400', 'text-indigo-400');
             } else {
-                signupForm.classList.add('hidden');
-                loginForm.classList.remove('hidden');
-                title.innerText = 'ログイン';
-                title.classList.replace('text-indigo-400', 'text-pink-400');
+                signupForm.classList.add('hidden'); loginForm.classList.remove('hidden');
+                title.innerText = 'ログイン'; title.classList.replace('text-indigo-400', 'text-pink-400');
             }
         }
     </script>
+
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/9.22.0/firebase-app.js";
+        import { getAuth, signInWithEmailAndPassword, createUserWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/9.22.0/firebase-auth.js";
+
+        const firebaseConfig = {
+            apiKey: "AIzaSyDvZoWqjJWz31p8VkL7PkFnWAJaFfNTrgo",
+            authDomain: "fire-ositask-kadai.firebaseapp.com",
+            projectId: "fire-ositask-kadai",
+            storageBucket: "fire-ositask-kadai.firebasestorage.app",
+            messagingSenderId: "768957795601",
+            appId: "1:768957795601:web:ada47d8533ff44e0d710b0",
+            measurementId: "G-C6NF6SJT5Z"
+        };
+
+        const app = initializeApp(firebaseConfig);
+        const auth = getAuth(app);
+
+        // ログイン処理
+        document.getElementById('login-btn').addEventListener('click', () => {
+            const email = document.getElementById('login-email').value;
+            const password = document.getElementById('login-password').value;
+            signInWithEmailAndPassword(auth, email, password)
+                .then(() => alert("ログイン成功！"))
+                .catch((e) => alert("エラー: " + e.message));
+        });
+
+        // 新規登録処理
+        document.getElementById('signup-btn').addEventListener('click', () => {
+            const email = document.getElementById('signup-email').value;
+            const password = document.getElementById('signup-password').value;
+            const confirm = document.getElementById('signup-confirm-password').value;
+
+            if (password !== confirm) {
+                alert("パスワードが一致しません！");
+                return;
+            }
+
+            createUserWithEmailAndPassword(auth, email, password)
+                .then(() => alert("登録成功！"))
+                .catch((e) => alert("エラー: " + e.message));
+        });
+    </script>
 </body>
+</html>
