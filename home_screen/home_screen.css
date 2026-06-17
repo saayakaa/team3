@@ -43,12 +43,15 @@ body {
 }
 
 /* 「推し」の画像エリア */
-.oshi-image {
+.oshi-area{
+    position: relative;
+    width: 180px;
+    margin: 0 auto 30px auto;
+}
+
+.oshi-image{
     width: 180px;
     height: 180px;
-    margin: 0 auto 30px auto;
-    
-    /* 黒枠を消し、薄いグレーの枠線と角丸に変更 */
     border: 1px solid #ededed;
     border-radius: 12px;
     background-color: #fafafa;
@@ -56,6 +59,43 @@ body {
     display: flex;
     justify-content: center;
     align-items: center;
+}
+/*
+.image-button{
+    position: absolute;
+
+    top: 50%;
+    right: -50px;
+    bottom: 50;
+
+    transform: translateY(-50%);
+
+    width: 40px;
+    height: 40px;
+
+    border: none;
+    border-radius: 50%;
+
+    background: #db98bb;
+    color: white;
+    cursor: pointer;
+}
+*/
+
+.image-button{
+    position: absolute;
+    right: -70px;
+    bottom: 0;
+
+
+
+    border: none;
+    border-radius: 40%;
+
+    background: #f2cfe1;
+    color: rgb(0, 0, 0);
+    cursor: pointer;
+
 }
 
 .level {
