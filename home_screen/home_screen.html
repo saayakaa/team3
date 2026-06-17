@@ -19,12 +19,19 @@
     <div class="oshi-area">
 
         <div class="oshi-image">
-            推し
+            <img id="oshiImage" class="oshi-image" src="" alt="推し画像">
         </div>
 
-        <button class="image-button">
-            📷画像変更
-        </button>
+        <label for="imageInput" class="image-button">
+           📷画像変更
+        </label>
+
+        <input
+            type="file"
+            id="imageInput"
+            accept="image/*"
+            style="display:none;"
+        >
 
     </div>
 
@@ -54,5 +61,7 @@
 
     </div>
 
+
+<script src="home_screen.js"></script>      <!-- JavaScriptを読み込む -->
 </body>
 </html>
