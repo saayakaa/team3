@@ -2,6 +2,7 @@
 <html lang="ja">
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>推しTask</title>
     <link rel="stylesheet" href="home_screen.css">
 </head>
@@ -10,30 +11,25 @@
     <div class="container">
         
         <div class="title-area">
-
             <h1>推しTask</h1>
             <button class="setting-button">⚙️</button>
-
         </div>
 
-    <div class="oshi-area">
+        <div class="oshi-area">
+            <div class="oshi-frame">
+                <img id="oshiImage" src="" alt="推し画像">
+            </div>
 
-        <div class="oshi-image">
-            <img id="oshiImage" class="oshi-image" src="" alt="推し画像">
+            <label for="imageInput" class="image-button">
+                📷画像変更
+            </label>
+            <input
+                type="file"
+                id="imageInput"
+                accept="image/*"
+                style="display:none;"
+            >
         </div>
-
-        <label for="imageInput" class="image-button">
-           📷画像変更
-        </label>
-
-        <input
-            type="file"
-            id="imageInput"
-            accept="image/*"
-            style="display:none;"
-        >
-
-    </div>
 
         <div class="level" id="level">
             Lv.1
@@ -45,23 +41,15 @@
 
         <h2>やること</h2>
 
-        <div class="task-area" id="taskArea">
-
-        </div>
+        <div class="task-area" id="taskArea"></div>
 
         <div class="function_button">
-
             <button>✏️</button>
-
             <button>📋</button>
-
             <button>📅</button>
-
         </div>
-
     </div>
 
-
-<script src="home_screen.js"></script>      <!-- JavaScriptを読み込む -->
+    <script src="home_screen.js"></script>
 </body>
 </html>

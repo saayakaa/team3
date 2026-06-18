@@ -1,166 +1,102 @@
 body {
     margin: 0;
-    /* 1・3枚目のような、ごく淡いピンク・パープル系の背景色に */
-    background: #fcf6f9; 
-    font-family: sans-serif;
-    color: #333333;
+    padding: 10px;
+    background: #fff5f9;
+    font-family: 'Helvetica Neue', Arial, sans-serif;
+    color: #5d5d5d;
+    min-height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }
 
 .container {
-    max-width: 450px; /* 1枚目のカード幅に少し近づける */
-    margin: 40px auto; /* 上下に少し余裕を持たせる */
-    padding: 30px;
-    
-    /* 1・3枚目のような、白くて角が丸い浮き出たカードを作成 */
+    width: 100%;
+    max-width: 400px;
+    padding: 20px;
     background: #ffffff;
-    border-radius: 20px;
-    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05); /* 3枚目のような柔らかい影 */
+    border-radius: 30px;
+    box-shadow: 0 10px 25px rgba(244, 114, 182, 0.15);
+    box-sizing: border-box;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
 }
 
 .title-area {
+    width: 100%;
     display: flex;
-    justify-content: center;
+    justify-content: space-between;
     align-items: center;
-    position: relative;
-    margin-bottom: 25px;
+    margin-bottom: 20px;
 }
 
-.title-area h1 {
-    margin: 0;
-    font-size: 28px;
-    font-weight: bold;
-}
-
-.setting-button {
-    position: absolute;
-    right: 0;
-    width: 40px;
-    height: 40px;
-    font-size: 22px;
-    background: none;
-    border: none;
-    cursor: pointer;
-}
-
-/* 「推し」の画像エリア */
-.oshi-area{
-    position: relative;
-    width: 180px;
-    margin: 0 auto 30px auto;
-}
-
-.oshi-image{
-    width: 180px;
-    height: 180px;
-    border: 1px solid #ededed;
-    border-radius: 12px;
+/* 枠としてのスタイル */
+.oshi-frame {
+    width: 160px;
+    height: 160px;
+    border: 5px solid #ffdeeb;
+    border-radius: 50%;
     background-color: #fafafa;
-
     display: flex;
     justify-content: center;
     align-items: center;
+    overflow: hidden; /* はみ出し防止 */
+    margin-bottom: 15px;
 }
 
-/*
-.image-button{
-    position: absolute;
-    right: -70px;
-    bottom: 0;
-
-
-
-    border: none;
-    border-radius: 40%;
-
-    background: #f2cfe1;
-    color: rgb(0, 0, 0);
-    cursor: pointer;
-
+/* 中の画像用 */
+.oshi-frame img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
 }
-*/
 
 .image-button {
-    position: absolute;
-    right: -110px;
-    bottom: 0;
-
-    border: none;
-    border-radius: 50%;
-
-    width: 100px;
-    height: 35px;
-
-    display: flex;
-    align-items: center;
-    justify-content: center;
-
-    background: #f2cfe1;
-    color: #000;
+    background: #ffdeeb;
+    padding: 5px 15px;
+    border-radius: 20px;
     cursor: pointer;
-
-    box-shadow: 0 2px 6px rgba(0,0,0,0.2);
+    font-size: 14px;
+    margin-bottom: 20px;
 }
 
-.level {
-    font-size: 20px;
-    font-weight: bold;
-    margin-bottom: 8px;
-}
-
-/* 経験値バー */
 .exp-bar {
     width: 100%;
-    height: 20px; /* 少しスタイリッシュに補足 */
-    background: #eeeeee; /* バーの背景をグレーに */
-    border: none; /* 黒枠を削除 */
-    border-radius: 10px; /* 丸みをつける */
-    overflow: hidden; /* 中身のピンクも一緒に丸める */
-    margin-bottom: 35px;
+    height: 20px;
+    background: #eeeeee;
+    border-radius: 10px;
+    margin-bottom: 20px;
+    overflow: hidden;
 }
 
 .exp-fill {
     width: 30%;
     height: 100%;
-    /* 3枚目のログインボタンに近い、綺麗なピンク〜マゼンタ系に */
-    background: #e37cb1; 
+    background: linear-gradient(90deg, #ff9ad2, #d19aff);
 }
 
-/* やることエリアのタイトル */
-.container > h2 {
-    font-size: 22px;
-    margin: 0 0 15px 0;
-}
-
-/* やることリストの枠 */
 .task-area {
-    height: 200px;
-    /* 黒枠ではなく、1枚目の入力欄のような薄いグレーの線に */
-    border: 1px solid #e0e0e0;
-    border-radius: 16px;
-    background-color: #ffffff;
-    margin-bottom: 30px;
+    width: 100%;
+    height: 150px;
+    border: 2px solid #ffdeeb;
+    border-radius: 20px;
+    margin-bottom: 20px;
 }
 
-/* 下部のボタンエリア */
 .function_button {
+    width: 100%;
     display: flex;
     justify-content: space-around;
 }
 
 .function_button button {
-    width: 80px;
-    height: 60px;
+    width: 70px;
+    height: 70px;
     font-size: 24px;
-    
-    /* ボタンの黒枠をなくし、1・3枚目のような淡いグレーの背景と角丸に */
-    background: #f0f2f5;
-    border: 1px solid #e4e6eb;
-    border-radius: 12px;
+    background: #ffffff;
+    border: 2px solid #ffdeeb;
+    border-radius: 20px;
+    box-shadow: 0 4px 0 #ffc1db;
     cursor: pointer;
-    transition: background 0.2s;
-}
-
-/* ボタンにマウスを乗せたときのふわっとしたエフェクト */
-.function_button button:hover {
-    background: #e4e6eb;
 }
