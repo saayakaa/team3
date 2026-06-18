@@ -71,7 +71,10 @@
             const email = document.getElementById('login-email').value;
             const password = document.getElementById('login-password').value;
             signInWithEmailAndPassword(auth, email, password)
-                .then(() => alert("ログイン成功！"))
+                .then(() => {
+                    alert("ログイン成功！");
+                    window.location.href = "../assignment_register_screen/index.html";
+                })
                 .catch((e) => alert("ログイン失敗: " + e.message));
         });
 
