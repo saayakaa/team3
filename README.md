@@ -1,6 +1,4 @@
 # team3
-hi
-test
 <<<<<<< Updated upstream
 =======
 
@@ -14,6 +12,6 @@ test
 - [app.js](app.js)
 
 操作:
-- 課題を入力して「追加」を押すとローカルの `localStorage` に保存されます。
+- 課題を入力して「追加」を押すとfirebaseに保存されます。
 - 課題の完了/削除が可能です。
 >>>>>>> Stashed changes
