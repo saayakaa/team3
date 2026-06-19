@@ -139,3 +139,22 @@ onSnapshot(q, (snapshot) => {
     console.error("データ取得エラー:", error);
     taskArea.innerHTML = `<div class="no-task">データの読み込みに失敗しました</div>`;
 });
+
+
+// ==========================================
+// C. ボタンを押したら画面を遷移する処理
+// ==========================================
+
+// 1. ✏️ボタン（function_button の中にある1番目のボタン）を取得
+// ==========================================
+// C. ボタンを押したら画面を遷移する処理（改良版）
+// ==========================================
+const editButton = document.querySelector(".function_button button:nth-child(1)");
+
+if (editButton) {
+    editButton.onclick = (e) => {
+        e.preventDefault(); // ボタン本来の挙動（フォーム送信など）を念のため止める
+        // 💡 課題入力画面のHTMLファイル名に合わせて変更してください
+        window.location.href = "../src/assignment_register_screen/index.html"; 
+    };
+}
