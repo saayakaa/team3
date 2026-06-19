@@ -24,7 +24,9 @@ import {
   collection, 
   query, 
   orderBy, 
-  onSnapshot 
+  onSnapshot, 
+  doc,         
+  updateDoc    
 } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
 
 // 2. Firebaseの初期化設定（課題入力側と同じConfig）
@@ -56,6 +58,20 @@ imageInput.addEventListener("change", function () {
 });
 
 // ==========================================
+// ⭕ 追加：Firestoreのタスクを完了にする関数
+// ==========================================
+async function completeTask(id) {
+    try {
+        const taskRef = doc(db, "kadai1", id);
+        await updateDoc(taskRef, {
+            done: true
+        });
+    } catch (e) {
+        console.error("タスクの完了処理に失敗しました:", e);
+    }
+}
+
+// ==========================================
 // B. Firestoreから未完了タスクを取得して表示
 // ==========================================
 // 作成日時（created）が新しい順にデータを監視するクエリ
@@ -72,11 +88,24 @@ onSnapshot(q, (snapshot) => {
 
     snapshot.forEach((docSnap) => {
         const t = docSnap.data();
+        const docId = docSnap.id;   // ドキュメントのIDを取得
 
         // 未完了（done === false）のタスクだけをピックアップ
         if (t.done === false) {
             const li = document.createElement("li");
             li.className = "home-task-item";
+
+        // チェック用の丸ボタンを作る
+            const checkBtn = document.createElement("button");
+            checkBtn.className = "home-check-btn";
+            checkBtn.innerHTML = ""; 
+            checkBtn.onclick = () => {
+                completeTask(docId); // クリックで完了関数を実行！
+            };
+
+        // 文字エリアのコンテナ
+            const contentDiv = document.createElement("div");
+            contentDiv.className = "home-task-content";
 
             // タスク名の決定（入力側のロジックに合わせて title か kadai を使用）
             const displayTitle = t.title || t.kadai || '無題のタスク';
@@ -91,8 +120,11 @@ onSnapshot(q, (snapshot) => {
             dateSpan.className = "home-task-date";
             dateSpan.textContent = t.due ? `📅 ${t.due}` : "";
 
-            li.appendChild(titleSpan);
-            li.appendChild(dateSpan);
+            contentDiv.appendChild(titleSpan); // コンテナにタスク名を入れる
+            contentDiv.appendChild(dateSpan);  // コンテナに期限を入れる
+
+            li.appendChild(checkBtn);   // 1. まず左側にチェックボタンを追加！
+            li.appendChild(contentDiv); // 2. 次に右側に文字コンテナを追加！
             ul.appendChild(li);
         }
     });
