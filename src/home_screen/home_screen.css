@@ -85,51 +85,6 @@ body {
     margin-bottom: 20px;
 }
 
-/* チェック用丸ボタンのスタイル */
-.home-check-btn {
-    width: 22px;
-    height: 22px;
-    border-radius: 50%;
-    border: 2px solid #ffbcda; /* 少し淡くて可愛いピンクの線に */
-    background: #ffffff;
-    cursor: pointer;
-    position: relative;
-    padding: 0;
-    flex-shrink: 0;
-    transition: all 0.2s ease;
-}
-
-/* ⭕ 追加：ホバーした時にきれいなチェックマークを浮かび上がらせる */
-.home-check-btn:hover {
-    background: #ffeee7; /* 背景をほんのりピンクに */
-    border-color: #ff9ad2;
-}
-
-.home-check-btn:hover::after {
-    content: "✓";
-    position: absolute;
-    font-size: 12px;
-    font-weight: bold;
-    color: #ff9ad2;
-    /* ボタンの真ん中に配置 */
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-}
-
-.task-area {
-    width: 100%;
-    min-height: 150px; /* ❌ height: 150px; から min-height に変更して中身に応じた可変にする */
-    max-height: 220px; /* タスクが増えすぎた時の最大高 */
-    border: 2px solid #ffdeeb;
-    border-radius: 20px;
-    margin-bottom: 20px;
-    overflow-y: auto;   /* スクロールは維持 */
-    padding: 10px;
-    box-sizing: border-box;
-    background: #ffffff;
-}
-
 /* ホーム画面用のタスクリストスタイル */
 .home-task-list {
     list-style: none; /* ⭕ 「・」を消すための設定 */

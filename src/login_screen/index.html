@@ -54,16 +54,17 @@
         const app = initializeApp(firebaseConfig);
         const auth = getAuth(app);
 
-        // ログイン処理
         document.getElementById('login-btn').addEventListener('click', () => {
             const email = document.getElementById('login-email').value;
             const password = document.getElementById('login-password').value;
             signInWithEmailAndPassword(auth, email, password)
-    .then(() => window.location.href = "../home_screen/index.html") // 行き先をホーム画面に変更
-    .catch((e) => showError("ログイン失敗: " + e.message));
+                .then(() => {
+                    // ここでホーム画面へ移動します
+                    window.location.href = "../home_screen/home_screen.html";
+                })
+                .catch((e) => showError("ログイン失敗: " + e.message));
         });
 
-        // 登録処理
         document.getElementById('signup-btn').addEventListener('click', () => {
             const email = document.getElementById('signup-email').value;
             const password = document.getElementById('signup-password').value;
@@ -73,7 +74,10 @@
                 return;
             }
             createUserWithEmailAndPassword(auth, email, password)
-                .then(() => alert("登録成功！"))
+                .then(() => {
+                    alert("登録成功！");
+                    switchForm('login');
+                })
                 .catch((e) => showError("エラー: " + e.message));
         });
     </script>
@@ -85,18 +89,13 @@
             const title = document.getElementById('title');
             const errorMsg = document.getElementById('error-msg');
             
-            errorMsg.classList.add('hidden'); // 切り替え時にエラーを消す
-            loginForm.classList.remove('fade-in-pop');
-            signupForm.classList.remove('fade-in-pop');
-
+            errorMsg.classList.add('hidden');
             if (type === 'signup') {
                 loginForm.classList.add('hidden'); signupForm.classList.remove('hidden');
-                signupForm.classList.add('fade-in-pop');
-                title.innerText = '新規登録'; title.classList.replace('text-pink-400', 'text-indigo-400');
+                title.innerText = '新規登録';
             } else {
                 signupForm.classList.add('hidden'); loginForm.classList.remove('hidden');
-                loginForm.classList.add('fade-in-pop');
-                title.innerText = 'ログイン'; title.classList.replace('text-indigo-400', 'text-pink-400');
+                title.innerText = 'ログイン';
             }
         }
         

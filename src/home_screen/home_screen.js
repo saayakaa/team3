@@ -5,6 +5,7 @@
 
 // 1. Firebaseの必要な機能をインポート
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
+import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
 import { 
   getFirestore, 
   collection, 
@@ -26,6 +27,7 @@ const firebaseConfig = {
 };
 
 const app = initializeApp(firebaseConfig);
+const auth = getAuth(app);
 const db = getFirestore(app);
 
 // HTML要素の取得
@@ -104,67 +106,78 @@ async function completeTask(id) {
 // 作成日時（created）が新しい順にデータを監視するクエリ
 const q = query(collection(db, "kadai1"), orderBy("created", "desc"));
 
-// リアルタイムでデータを監視（onSnapshot）
-onSnapshot(q, (snapshot) => {
-    // 表示エリアをクリア
-    taskArea.innerHTML = "";
-    
-    // リストの入れ物（ul）を作成
-    const ul = document.createElement("ul");
-    ul.className = "home-task-list";
+function startFirestoreListener() {
+    const q = query(collection(db, "kadai1"), orderBy("created", "desc"));
 
-    snapshot.forEach((docSnap) => {
-        const t = docSnap.data();
-        const docId = docSnap.id;   // ドキュメントのIDを取得
+    onSnapshot(q, (snapshot) => {
+        // 表示エリアをクリア
+        taskArea.innerHTML = "";
+        
+        // リストの入れ物（ul）を作成
+        const ul = document.createElement("ul");
+        ul.className = "home-task-list";
 
-        // 未完了（done === false）のタスクだけをピックアップ
-        if (t.done === false) {
-            const li = document.createElement("li");
-            li.className = "home-task-item";
+        snapshot.forEach((docSnap) => {
+            const t = docSnap.data();
+            const docId = docSnap.id;   // ドキュメントのIDを取得
 
-        // チェック用の丸ボタンを作る
-            const checkBtn = document.createElement("button");
-            checkBtn.className = "home-check-btn";
-            checkBtn.innerHTML = ""; 
-            checkBtn.onclick = () => {
-                completeTask(docId); // クリックで完了関数を実行！
-            };
+            // 未完了（done === false）のタスクだけをピックアップ
+            if (t.done === false) {
+                const li = document.createElement("li");
+                li.className = "home-task-item";
 
-        // 文字エリアのコンテナ
-            const contentDiv = document.createElement("div");
-            contentDiv.className = "home-task-content";
+            // チェック用の丸ボタンを作る
+                const checkBtn = document.createElement("button");
+                checkBtn.className = "home-check-btn";
+                checkBtn.innerHTML = ""; 
+                checkBtn.onclick = () => {
+                    completeTask(docId); // クリックで完了関数を実行！
+                };
 
-            // タスク名の決定（入力側のロジックに合わせて title か kadai を使用）
-            const displayTitle = t.title || t.kadai || '無題のタスク';
+            // 文字エリアのコンテナ
+                const contentDiv = document.createElement("div");
+                contentDiv.className = "home-task-content";
 
-            // 左側：タスク名
-            const titleSpan = document.createElement("span");
-            titleSpan.className = "home-task-title";
-            titleSpan.textContent = displayTitle;
+                // タスク名の決定（入力側のロジックに合わせて title か kadai を使用）
+                const displayTitle = t.title || t.kadai || '無題のタスク';
 
-            // 右側：期限（入力側が due なので t.due に修正）
-            const dateSpan = document.createElement("span");
-            dateSpan.className = "home-task-date";
-            dateSpan.textContent = t.due ? `📅 ${t.due}` : "";
+                // 左側：タスク名
+                const titleSpan = document.createElement("span");
+                titleSpan.className = "home-task-title";
+                titleSpan.textContent = displayTitle;
 
-            contentDiv.appendChild(titleSpan); // コンテナにタスク名を入れる
-            contentDiv.appendChild(dateSpan);  // コンテナに期限を入れる
+                // 右側：期限（入力側が due なので t.due に修正）
+                const dateSpan = document.createElement("span");
+                dateSpan.className = "home-task-date";
+                dateSpan.textContent = t.due ? `📅 ${t.due}` : "";
 
-            li.appendChild(checkBtn);   // 1. まず左側にチェックボタンを追加！
-            li.appendChild(contentDiv); // 2. 次に右側に文字コンテナを追加！
-            ul.appendChild(li);
+                contentDiv.appendChild(titleSpan); // コンテナにタスク名を入れる
+                contentDiv.appendChild(dateSpan);  // コンテナに期限を入れる
+
+                li.appendChild(checkBtn);   // 1. まず左側にチェックボタンを追加！
+                li.appendChild(contentDiv); // 2. 次に右側に文字コンテナを追加！
+                ul.appendChild(li);
+            }
+        });
+
+        // 未完了タスクがゼロだった場合の表示
+        if (ul.childElementCount === 0) {
+            taskArea.innerHTML = `<div class="no-task">完了！推しが褒めてるよ！</div>`;
+        } else {
+            taskArea.appendChild(ul);
         }
+    }, (error) => {
+        console.error("データ取得エラー:", error);
+        taskArea.innerHTML = `<div class="no-task">データの読み込みに失敗しました</div>`;
     });
+}
 
-    // 未完了タスクがゼロだった場合の表示
-    if (ul.childElementCount === 0) {
-        taskArea.innerHTML = `<div class="no-task">完了！推しが褒めてるよ！</div>`;
+onAuthStateChanged(auth, (user) => {
+    if (user) {
+        startFirestoreListener();
     } else {
-        taskArea.appendChild(ul);
+        window.location.href = "../login_screen/index.html";
     }
-}, (error) => {
-    console.error("データ取得エラー:", error);
-    taskArea.innerHTML = `<div class="no-task">データの読み込みに失敗しました</div>`;
 });
 
 
