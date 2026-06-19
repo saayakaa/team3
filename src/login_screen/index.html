@@ -59,8 +59,8 @@
             const email = document.getElementById('login-email').value;
             const password = document.getElementById('login-password').value;
             signInWithEmailAndPassword(auth, email, password)
-                .then(() => window.location.href = "../assignment_register_screen/index.html")
-                .catch((e) => showError("ログイン失敗: " + e.message));
+    .then(() => window.location.href = "../home_screen/index.html") // 行き先をホーム画面に変更
+    .catch((e) => showError("ログイン失敗: " + e.message));
         });
 
         // 登録処理
