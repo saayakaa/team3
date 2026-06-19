@@ -32,9 +32,11 @@ const db = getFirestore(app);
 const taskArea = document.getElementById("taskArea");
 const imageInput = document.getElementById("imageInput");
 const oshiImage = document.getElementById("oshiImage");
+const levelEl = document.getElementById("level");     // 👈 追加
+const expFillEl = document.getElementById("expFill"); // 👈 追加
 
 // ==========================================
-// A. 画像アップロード処理（既存機能）
+// 画像アップロード処理（既存機能）
 // ==========================================
 imageInput.addEventListener("change", function () {
     const file = imageInput.files[0];
@@ -44,7 +46,42 @@ imageInput.addEventListener("change", function () {
 });
 
 // ==========================================
-// ⭕ 追加：Firestoreのタスクを完了にする関数
+// データの管理（LocalStorage）とレベルアップ処理
+// ==========================================
+// ページを開いたときに保存されたレベルと経験値を読み込む（なければLv.1, EXP:0）
+let currentLevel = parseInt(localStorage.getItem("oshi_level")) || 1;
+let currentExp = parseInt(localStorage.getItem("oshi_exp")) || 0;
+
+// 画面に現在のレベルとゲージを反映する関数
+function updateLevelDOM() {
+    levelEl.textContent = `Lv.${currentLevel}`;
+    expFillEl.style.width = `${currentExp}%`; // 経験値の数値をそのままゲージの「%」にする
+}
+
+// 経験値を獲得する関数
+function gainExp(amount) {
+    currentExp += amount;
+
+    // 経験値が 100 以上になったらレベルアップ！
+    if (currentExp >= 100) {
+        currentLevel += 1;
+        currentExp = currentExp - 100; // 100を超えて溢れた分の経験値を次回に繰り越し
+        alert(`🎉 レベルアップ！ Lv.${currentLevel} になりました！`);
+    }
+
+    // 新しい状態をブラウザに保存（これで画面を閉じても消えない）
+    localStorage.setItem("oshi_level", currentLevel);
+    localStorage.setItem("oshi_exp", currentExp);
+
+    // 表示を更新
+    updateLevelDOM();
+}
+
+// 画面起動時に一度表示を最新にする
+updateLevelDOM();
+
+// ==========================================
+// ⭕ 修正：Firestoreのタスクを完了にして、経験値を獲得する
 // ==========================================
 async function completeTask(id) {
     try {
@@ -52,13 +89,17 @@ async function completeTask(id) {
         await updateDoc(taskRef, {
             done: true
         });
+        
+        // 🛠️ タスクのデータ更新に成功したら経験値を 20 獲得！
+        gainExp(20);
+
     } catch (e) {
         console.error("タスクの完了処理に失敗しました:", e);
     }
 }
 
 // ==========================================
-// B. Firestoreから未完了タスクを取得して表示
+// Firestoreから未完了タスクを取得して表示
 // ==========================================
 // 作成日時（created）が新しい順にデータを監視するクエリ
 const q = query(collection(db, "kadai1"), orderBy("created", "desc"));
@@ -128,19 +169,18 @@ onSnapshot(q, (snapshot) => {
 
 
 // ==========================================
-// C. ボタンを押したら画面を遷移する処理
+// ボタンを押したら画面を遷移する処理
 // ==========================================
 
 // 1. ✏️ボタン（function_button の中にある1番目のボタン）を取得
 // ==========================================
-// C. ボタンを押したら画面を遷移する処理（改良版）
+// ボタンを押したら画面を遷移する処理
 // ==========================================
 const editButton = document.querySelector(".function_button button:nth-child(1)");
 
 if (editButton) {
     editButton.onclick = (e) => {
         e.preventDefault(); // ボタン本来の挙動（フォーム送信など）を念のため止める
-        // 💡 課題入力画面のHTMLファイル名に合わせて変更してください
         window.location.href = "../assignment_register_screen/index.html"; 
     };
 }
