@@ -38,49 +38,60 @@
     </div>
 
     <script type="module">
-        import { initializeApp } from "https://www.gstatic.com/firebasejs/9.22.0/firebase-app.js";
-        import { getAuth, signInWithEmailAndPassword, createUserWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/9.22.0/firebase-auth.js";
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/9.22.0/firebase-app.js";
+    import { getAuth, signInWithEmailAndPassword, createUserWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/9.22.0/firebase-auth.js";
+    // Firestore用の機能を追加
+    import { getFirestore, doc, setDoc } from "https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore.js";
 
-        const firebaseConfig = {
-            apiKey: "AIzaSyDvZoWqjJWz31p8VkL7PkFnWAJaFfNTrgo",
-            authDomain: "fire-ositask-kadai.firebaseapp.com",
-            projectId: "fire-ositask-kadai",
-            storageBucket: "fire-ositask-kadai.firebasestorage.app",
-            messagingSenderId: "768957795601",
-            appId: "1:768957795601:web:ada47d8533ff44e0d710b0",
-            measurementId: "G-C6NF6SJT5Z"
-        };
+    const firebaseConfig = {
+        apiKey: "AIzaSyDvZoWqjJWz31p8VkL7PkFnWAJaFfNTrgo",
+        authDomain: "fire-ositask-kadai.firebaseapp.com",
+        projectId: "fire-ositask-kadai",
+        storageBucket: "fire-ositask-kadai.firebasestorage.app",
+        messagingSenderId: "768957795601",
+        appId: "1:768957795601:web:ada47d8533ff44e0d710b0",
+        measurementId: "G-C6NF6SJT5Z"
+    };
 
-        const app = initializeApp(firebaseConfig);
-        const auth = getAuth(app);
+    const app = initializeApp(firebaseConfig);
+    const auth = getAuth(app);
+    const db = getFirestore(app); // DB接続の定義
 
-        document.getElementById('login-btn').addEventListener('click', () => {
-            const email = document.getElementById('login-email').value;
-            const password = document.getElementById('login-password').value;
-            signInWithEmailAndPassword(auth, email, password)
-                .then(() => {
-                    // ここでホーム画面へ移動します
-                    window.location.href = "../home_screen/home_screen.html";
-                })
-                .catch((e) => showError("ログイン失敗: " + e.message));
-        });
+    document.getElementById('login-btn').addEventListener('click', () => {
+        const email = document.getElementById('login-email').value;
+        const password = document.getElementById('login-password').value;
+        signInWithEmailAndPassword(auth, email, password)
+            .then(() => {
+                window.location.href = "../home_screen/home_screen.html";
+            })
+            .catch((e) => showError("ログイン失敗: " + e.message));
+    });
 
-        document.getElementById('signup-btn').addEventListener('click', () => {
-            const email = document.getElementById('signup-email').value;
-            const password = document.getElementById('signup-password').value;
-            const confirm = document.getElementById('signup-confirm-password').value;
-            if (password !== confirm) {
-                showError("パスワードが一致しません！");
-                return;
-            }
-            createUserWithEmailAndPassword(auth, email, password)
-                .then(() => {
+    document.getElementById('signup-btn').addEventListener('click', () => {
+        const email = document.getElementById('signup-email').value;
+        const password = document.getElementById('signup-password').value;
+        const confirm = document.getElementById('signup-confirm-password').value;
+        
+        if (password !== confirm) {
+            showError("パスワードが一致しません！");
+            return;
+        }
+
+        createUserWithEmailAndPassword(auth, email, password)
+            .then((userCredential) => {
+                // 登録成功したら、そのユーザーID(uid)でFirestoreに箱を作る
+                const user = userCredential.user;
+                setDoc(doc(db, "users", user.uid), {
+                    email: email,
+                    createdAt: new Date()
+                }).then(() => {
                     alert("登録成功！");
                     switchForm('login');
-                })
-                .catch((e) => showError("エラー: " + e.message));
-        });
-    </script>
+                });
+            })
+            .catch((e) => showError("エラー: " + e.message));
+    });
+</script>
 
     <script>
         function switchForm(type) {
