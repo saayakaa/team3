@@ -1,17 +1,3 @@
-/*
-//firebaseとの接続
-initializeApp()
-getFirestore()
-
-// kadai1から取得
-const q = query(
-    collection(db, "kadai1"),
-    orderBy("created", "desc")
-);
-
-// 未完了だけ取得
-t.done === false
-*/
 
 // ==========================================
 // 追加：Firebaseからタスクを取得して表示する処理
@@ -155,6 +141,6 @@ if (editButton) {
     editButton.onclick = (e) => {
         e.preventDefault(); // ボタン本来の挙動（フォーム送信など）を念のため止める
         // 💡 課題入力画面のHTMLファイル名に合わせて変更してください
-        window.location.href = "../src/assignment_register_screen/index.html"; 
+        window.location.href = "../assignment_register_screen/index.html"; 
     };
 }
