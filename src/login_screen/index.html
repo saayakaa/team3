@@ -5,13 +5,16 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>推しTask</title>
     <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="style.css">
 </head>
 <body class="bg-pink-50 min-h-screen flex flex-col items-center justify-center p-4">
 
-    <h1 class="text-4xl font-bold text-pink-400 mb-8">推しTask</h1>
+    <h1 class="app-title text-4xl font-bold text-pink-400 mb-8">推しTask</h1>
 
-    <div class="bg-white w-full max-w-md p-8 rounded-3xl shadow-lg border-4 border-pink-100">
+    <div class="container bg-white w-full max-w-md p-8 rounded-3xl shadow-lg border-4 border-pink-100">
         <h2 id="title" class="text-3xl font-bold text-pink-400 text-center mb-8">ログイン</h2>
+
+        <p id="error-msg" class="text-red-400 text-sm text-center mb-4 hidden font-bold"></p>
 
         <div id="login-form">
             <input type="email" id="login-email" placeholder="メールアドレス" class="w-full p-4 mb-4 rounded-2xl bg-pink-50 border-2 border-pink-100 focus:outline-none focus:border-pink-300">
@@ -27,28 +30,12 @@
             <input type="email" id="signup-email" placeholder="メールアドレス" class="w-full p-4 mb-4 rounded-2xl bg-pink-50 border-2 border-pink-100 focus:outline-none focus:border-pink-300">
             <input type="password" id="signup-password" placeholder="パスワード" class="w-full p-4 mb-4 rounded-2xl bg-pink-50 border-2 border-pink-100 focus:outline-none focus:border-pink-300">
             <input type="password" id="signup-confirm-password" placeholder="パスワード（確認用）" class="w-full p-4 mb-6 rounded-2xl bg-pink-50 border-2 border-pink-100 focus:outline-none focus:border-pink-300">
-            
             <button id="signup-btn" class="w-full bg-indigo-400 text-white font-bold py-4 rounded-2xl hover:bg-indigo-500 transition shadow-md">登録</button>
             <p class="text-center mt-6 text-sm text-gray-400">
                 <button onclick="switchForm('login')" class="text-indigo-400 font-bold underline">ログイン画面に戻る</button>
             </p>
         </div>
     </div>
-
-    <script>
-        function switchForm(type) {
-            const loginForm = document.getElementById('login-form');
-            const signupForm = document.getElementById('signup-form');
-            const title = document.getElementById('title');
-            if (type === 'signup') {
-                loginForm.classList.add('hidden'); signupForm.classList.remove('hidden');
-                title.innerText = '新規登録'; title.classList.replace('text-pink-400', 'text-indigo-400');
-            } else {
-                signupForm.classList.add('hidden'); loginForm.classList.remove('hidden');
-                title.innerText = 'ログイン'; title.classList.replace('text-indigo-400', 'text-pink-400');
-            }
-        }
-    </script>
 
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/9.22.0/firebase-app.js";
@@ -72,26 +59,51 @@
             const password = document.getElementById('login-password').value;
             signInWithEmailAndPassword(auth, email, password)
                 .then(() => {
-                    alert("ログイン成功！");
-                    window.location.href = "../assignment_register_screen/index.html";
+                    // ここでホーム画面へ移動します
+                    window.location.href = "../home_screen/home_screen.html";
                 })
-                .catch((e) => alert("ログイン失敗: " + e.message));
+                .catch((e) => showError("ログイン失敗: " + e.message));
         });
 
         document.getElementById('signup-btn').addEventListener('click', () => {
             const email = document.getElementById('signup-email').value;
             const password = document.getElementById('signup-password').value;
             const confirm = document.getElementById('signup-confirm-password').value;
-
             if (password !== confirm) {
-                alert("パスワードが一致しません！");
+                showError("パスワードが一致しません！");
                 return;
             }
-
             createUserWithEmailAndPassword(auth, email, password)
-                .then(() => alert("登録成功！"))
-                .catch((e) => alert("エラー: " + e.message));
+                .then(() => {
+                    alert("登録成功！");
+                    switchForm('login');
+                })
+                .catch((e) => showError("エラー: " + e.message));
         });
+    </script>
+
+    <script>
+        function switchForm(type) {
+            const loginForm = document.getElementById('login-form');
+            const signupForm = document.getElementById('signup-form');
+            const title = document.getElementById('title');
+            const errorMsg = document.getElementById('error-msg');
+            
+            errorMsg.classList.add('hidden');
+            if (type === 'signup') {
+                loginForm.classList.add('hidden'); signupForm.classList.remove('hidden');
+                title.innerText = '新規登録';
+            } else {
+                signupForm.classList.add('hidden'); loginForm.classList.remove('hidden');
+                title.innerText = 'ログイン';
+            }
+        }
+        
+        function showError(msg) {
+            const errorMsg = document.getElementById('error-msg');
+            errorMsg.innerText = msg;
+            errorMsg.classList.remove('hidden');
+        }
     </script>
 </body>
 </html>
