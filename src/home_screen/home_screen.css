@@ -1,0 +1,148 @@
+body {
+    margin: 0;
+    padding: 10px;
+    background: #fff5f9;
+    font-family: 'Helvetica Neue', Arial, sans-serif;
+    color: #5d5d5d;
+    min-height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.container {
+    width: 100%;
+    max-width: 400px;
+    padding: 20px;
+    background: #ffffff;
+    border-radius: 30px;
+    box-shadow: 0 10px 25px rgba(244, 114, 182, 0.15);
+    box-sizing: border-box;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.title-area {
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+}
+
+/* 枠としてのスタイル */
+.oshi-frame {
+    width: 160px;
+    height: 160px;
+    border: 5px solid #ffdeeb;
+    border-radius: 50%;
+    background-color: #fafafa;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    overflow: hidden; /* はみ出し防止 */
+    margin-bottom: 15px;
+}
+
+/* 中の画像用 */
+.oshi-frame img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.image-button {
+    background: #ffdeeb;
+    padding: 5px 15px;
+    border-radius: 20px;
+    cursor: pointer;
+    font-size: 14px;
+    margin-bottom: 20px;
+}
+
+.exp-bar {
+    width: 100%;
+    height: 20px;
+    background: #eeeeee;
+    border-radius: 10px;
+    margin-bottom: 20px;
+    overflow: hidden;
+}
+
+.exp-fill {
+    width: 0%; /* 初期値は0%にしておく */
+    height: 100%;
+    background: linear-gradient(90deg, #ff9ad2, #d19aff);
+    transition: width 0.4s ease-out; /* ✨ これでゲージがニュッと気持ちよく伸びます */
+}
+
+.task-area {
+    width: 100%;
+    height: 150px;
+    border: 2px solid #ffdeeb;
+    border-radius: 20px;
+    margin-bottom: 20px;
+}
+
+/* ホーム画面用のタスクリストスタイル */
+.home-task-list {
+    list-style: none; /* ⭕ 「・」を消すための設定 */
+    padding: 0;
+    margin: 0;
+    width: 100%;
+}
+
+.home-task-item {
+    display: flex;
+    align-items: center; /* 縦方向を中央揃えに */
+    gap: 12px;           /* ボタンと文字の間隔 */
+    padding: 10px 8px;
+    background: #fff;
+    border-bottom: 1px dashed #ffdeeb;
+    box-sizing: border-box; /* はみ出し防止 */
+}
+
+/* タスク名と期限のコンテナ */
+.home-task-content {
+    display: flex;
+    flex-direction: column; /* ⭕ 縦並びにして、タスク名の下に日付を配置 */
+    gap: 4px;               /* タスク名と日付の隙間 */
+    flex-grow: 1;
+    min-width: 0;           /* 枠外へのはみ出しを防ぐ魔法のプロパティ */
+}
+
+.home-task-title {
+    font-weight: bold;
+    color: #5d5d5d;
+    font-size: 14px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    margin-right: 8px;         /* 期限との間に少し隙間を作る */
+}
+
+.home-task-date {
+    font-size: 13px;       
+    font-weight: 500;      /* 少しだけ太文字に */
+    color: #ff9ad2;        /* 推しカラーのピンクにして目立たせる */
+    display: flex;
+    align-items: center;
+}
+
+.function_button {
+    width: 100%;
+    display: flex;
+    justify-content: space-around;
+}
+
+.function_button button {
+    width: 70px;
+    height: 70px;
+    font-size: 24px;
+    background: #ffffff;
+    border: 2px solid #ffdeeb;
+    border-radius: 20px;
+    box-shadow: 0 4px 0 #ffc1db;
+    cursor: pointer;
+}

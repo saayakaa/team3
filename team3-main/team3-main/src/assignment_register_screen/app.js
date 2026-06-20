@@ -103,14 +103,19 @@ async function renderTasks() {
   }
 
   try {
-      const querySnapshot = await getDocs(collection(db, "users", user.uid, "kadai1"));
-      const tasks = querySnapshot.docs.map(docSnap => ({ id: docSnap.id, ...docSnap.data() }));
-      const sortedTasks = sortTasks(tasks);
-      
-      listEl.innerHTML = '';
-      
-      sortedTasks.forEach((t) => {
-        const docId = t.id; // 👈 Firestoreが自動生成したID (vae6mmwqK1kZ...など)
+    // 💡 ユーザーのUIDを含んだ正しいルートに変更！
+    const q = query(
+      collection(db, "users", user.uid, "kadai1"), 
+      orderBy("created", "desc")
+    );
+    const querySnapshot = await getDocs(q);
+    
+    listEl.innerHTML = '';
+    
+    querySnapshot.forEach((docSnap) => {
+      const t = docSnap.data();
+      const docId = docSnap.id; // 👈 Firestoreが自動生成したID (vae6mmwqK1kZ...など)
+
       const li = document.createElement('li');
       li.className = 'task-item' + (t.done ? ' done' : '');
 
