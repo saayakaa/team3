@@ -60,6 +60,29 @@ button:active {
     transform: translateY(4px);
     box-shadow: none;
 }
+
+.back-button {
+    display: inline-block;
+    background: #ffffff;
+    border: 2px solid #ffdeeb;
+    padding: 12px 20px;
+    border-radius: 15px;
+    box-shadow: 0 4px 0 #ffc1db;
+    color: #5d5d5d;
+    font-weight: bold;
+    text-decoration: none;
+    transition: all 0.2s;
+    margin-bottom: 20px;
+}
+
+.back-button:hover {
+    background: #fff0f5;
+}
+
+.back-button:active {
+    transform: translateY(4px);
+    box-shadow: none;
+}
 /* 課題入力画面全体の最大幅を制限 */
 .container {
     max-width: 450px !important; /* ログイン画面と同じサイズ感にする */
