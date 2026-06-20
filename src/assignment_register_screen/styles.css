@@ -96,6 +96,31 @@ textarea {
     width: 100%;        /* 枠に合わせて広がる */
     box-sizing: border-box; /* パディングを含めて幅を計算する（超重要） */
 }
+
+.sort-row {
+    width: 50%;
+    max-width: 240px;
+    margin: 0 0 20px auto;
+}
+
+.sort-row label {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    gap: 10px;
+    font-size: 14px;
+    color: #5d5d5d;
+}
+
+.sort-row select {
+    width: auto;
+    min-width: 130px;
+    padding: 10px 12px;
+    border-radius: 15px;
+    border: 2px solid #ffdeeb;
+    background: #ffffff;
+}
+
 /* 完了状態のタスクに線を引く */
 .done .task-title {
     text-decoration: line-through; /* 線を引く */
