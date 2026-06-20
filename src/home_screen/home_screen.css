@@ -94,10 +94,13 @@ body {
 
 .task-area {
     width: 100%;
-    height: 150px;
+    max-height: 115px;
+    height: 115px;
     border: 2px solid #ffdeeb;
     border-radius: 20px;
     margin-bottom: 20px;
+    overflow-y: auto;
+    background: #ffffff;
 }
 
 /* ホーム画面用のタスクリストスタイル */
@@ -177,11 +180,43 @@ body {
 .home-task-title {
     font-weight: bold;
     color: #5d5d5d;
-    font-size: 14px;
+    font-size: 16px;
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
     margin-right: 8px;         /* 期限との間に少し隙間を作る */
+}
+
+.home-check-btn {
+    width: 38px;
+    height: 38px;
+    min-width: 38px;
+    min-height: 38px;
+    border-radius: 50%;
+    border: 2px solid #ffdeeb;
+    background: #ffffff;
+    box-shadow: 0 4px 0 #ffc1db;
+    cursor: pointer;
+    transition: all 0.2s;
+    font-size: 18px;
+    color: rgba(93, 93, 93, 0.9);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+}
+
+.home-check-btn::after {
+    content: '✔';
+    position: absolute;
+    font-size: 18px;
+    color: rgba(93, 93, 93, 0.15);
+    opacity: 0.9;
+}
+
+.home-check-btn:active {
+    transform: translateY(4px);
+    box-shadow: none;
 }
 
 .home-task-date {

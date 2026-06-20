@@ -156,7 +156,7 @@ function startFirestoreListener(user) {
         });
 
         if (ul.childElementCount === 0) {
-            taskArea.innerHTML = `<div class="no-task">完了！推しが褒めてるよ！</div>`;
+            taskArea.innerHTML = `<div class="no-task">　完了！推しが褒めてるよ！</div>`;
         } else {
             taskArea.appendChild(ul);
         }
