@@ -34,9 +34,19 @@ const clearBtn = document.getElementById('clear');
 async function renderTasks() {
   listEl.innerHTML = '<li>読み込み中...</li>';
   
+  // 💡 ログインしているユーザーを取得
+  const user = auth.currentUser; 
+  if (!user) {
+    listEl.innerHTML = '<li>ログインしていません</li>';
+    return;
+  }
+
   try {
-    // kadai1 コレクションから作成日時（created）が新しい順にデータを取得するクエリ
-    const q = query(collection(db, "kadai1"), orderBy("created", "desc"));
+    // 💡 ユーザーのUIDを含んだ正しいルートに変更！
+    const q = query(
+      collection(db, "users", user.uid, "kadai1"), 
+      orderBy("created", "desc")
+    );
     const querySnapshot = await getDocs(q);
     
     listEl.innerHTML = '';
@@ -84,20 +94,31 @@ async function renderTasks() {
 }
 
 // 4. Firestoreへデータを追加する関数 (addDoc)
+import { getAuth } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
+const auth = getAuth();
+
+// ⭕ 正しい書き方
 async function addTask(task) {
-  try {
-    // 「kadai1」コレクションに自動生成IDで保存
-    await addDoc(collection(db, "kadai1"), task);
-    renderTasks(); // 画面を再描画
-  } catch (e) {
-    console.error("データ追加エラー:", e);
+  
+  // 💡 必ず「関数の中（ボタンが押された瞬間）」で最新のユーザーを取得します！
+  const user = auth.currentUser; 
+  
+  if (user) {
+    // 最新の user.uid を使って保存する
+    await addDoc(collection(db, "users", user.uid, "kadai1"), task);
+    renderTasks();
+  } else {
+    alert("ログインしていないため保存できません！");
   }
 }
 
 // 5. Firestoreのデータを削除する関数 (deleteDoc)
 async function deleteTask(id) {
+  const user = auth.currentUser;
+  if (!user) return;
+
   try {
-    await deleteDoc(doc(db, "kadai1", id));
+    await deleteDoc(doc(db, "users", user.uid, "kadai1", id)); // 💡 ルート変更
     renderTasks();
   } catch (e) {
     console.error("データ削除エラー:", e);
@@ -106,11 +127,12 @@ async function deleteTask(id) {
 
 // 6. Firestoreの完了状態を反転させる関数 (updateDoc)
 async function toggleDone(id, currentStatus) {
+  const user = auth.currentUser;
+  if (!user) return;
+
   try {
-    const taskRef = doc(db, "kadai1", id);
-    await updateDoc(taskRef, {
-      done: !currentStatus
-    });
+    const taskRef = doc(db, "users", user.uid, "kadai1", id); // 💡 ルート変更
+    await updateDoc(taskRef, { done: !currentStatus });
     renderTasks();
   } catch (e) {
     console.error("データ更新エラー:", e);
@@ -149,4 +171,16 @@ form.addEventListener('submit', e => {
 clearBtn.addEventListener('click', () => { form.reset(); });
 
 // 最初にデータを読み込む
-renderTasks();
+import { onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
+
+// 相方さんのログイン監視コードの中
+onAuthStateChanged(auth, (user) => {
+  if (user) {
+    // ログインに成功したら、あなたの課題一覧を表示する！
+    renderTasks();
+    const user = auth.currentUser;
+  } else {
+    // ログアウト中なら一覧を空にするなど
+    listEl.innerHTML = '<li>ログインしてください</li>';
+  }
+});
