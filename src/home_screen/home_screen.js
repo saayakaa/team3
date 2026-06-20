@@ -39,6 +39,11 @@ imageInput.addEventListener("change", function () {
     if (!file) return;
     const imageUrl = URL.createObjectURL(file);
     oshiImage.src = imageUrl;
+
+    /* 画像が入ったら、文字を非表示（消去）にする */
+    const oshiText = document.getElementById("oshiText");
+    if (oshiText) oshiText.style.display = "none";
+
 });
 
 // レベルと経験値処理（ガチ仕様）
