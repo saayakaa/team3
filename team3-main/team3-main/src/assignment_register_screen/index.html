@@ -11,6 +11,17 @@
     <a href="../home_screen/home_screen.html" class="back-button">← ホームへ戻る</a>
     <h1>推しTask — 課題入力</h1>
 
+    <div class="sort-row">
+      <label>並べ替え
+        <select id="sort-order">
+          <option value="recommended" selected>おすすめ順</option>
+          <option value="due">期日順</option>
+          <option value="priority">優先度順</option>
+          <option value="oldest">古い順</option>
+        </select>
+      </label>
+    </div>
+
     <form id="task-form">
       <div class="field">
         <label>タイトル

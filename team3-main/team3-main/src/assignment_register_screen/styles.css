@@ -55,6 +55,28 @@ h1 {
     font-family: 'Rounded Mplus 1c', sans-serif;
 }
 
+.sort-row {
+    display: flex;
+    justify-content: center;
+    margin-bottom: 20px;
+}
+
+.sort-row label {
+    font-size: 14px;
+    color: #5d5d5d;
+}
+
+.sort-row select {
+    margin-left: 10px;
+    padding: 10px 12px;
+    border: 2px solid #ffdeeb;
+    border-radius: 15px;
+    background: #ffffff;
+    color: #5d5d5d;
+    font-weight: bold;
+    min-width: 160px;
+}
+
 /* 入力欄：width: 100% と box-sizing で親からはみ出さない */
 input, select, textarea {
     width: 100%;

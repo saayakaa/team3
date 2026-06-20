@@ -29,6 +29,67 @@ const db = getFirestore(app);
 const form = document.getElementById('task-form');
 const listEl = document.getElementById('task-list');
 const clearBtn = document.getElementById('clear');
+const sortSelect = document.getElementById('sort-order');
+let currentSort = 'recommended';
+
+function getPriorityWeight(priority) {
+  const order = { high: 3, medium: 2, low: 1 };
+  return order[priority] || 0;
+}
+
+function getPriorityScore(priority) {
+  const scoreMap = { high: 30, medium: 20, low: 10 };
+  return scoreMap[priority] || 0;
+}
+
+function getDueUrgencyScore(due) {
+  if (!due) return 0;
+  const today = new Date();
+  today.setHours(0, 0, 0, 0);
+  const dueDate = new Date(due);
+  dueDate.setHours(0, 0, 0, 0);
+  const diffMs = dueDate - today;
+  const remainingDays = Math.round(diffMs / (1000 * 60 * 60 * 24));
+  return (14 - remainingDays) * 2;
+}
+
+function getTaskScore(task) {
+  return getPriorityScore(task.priority) + getDueUrgencyScore(task.due);
+}
+
+function sortTasks(tasks) {
+  return tasks.slice().sort((a, b) => {
+    if (currentSort === 'due') {
+      const aDue = a.due || '9999-12-31';
+      const bDue = b.due || '9999-12-31';
+      return aDue.localeCompare(bDue) || (a.created || 0) - (b.created || 0);
+    }
+
+    if (currentSort === 'priority') {
+      const diff = getPriorityScore(b.priority) - getPriorityScore(a.priority);
+      return diff || (a.created || 0) - (b.created || 0);
+    }
+
+    if (currentSort === 'oldest') {
+      return (a.created || 0) - (b.created || 0);
+    }
+
+    // recommended
+    const aDone = a.done ? 1 : 0;
+    const bDone = b.done ? 1 : 0;
+    if (aDone !== bDone) return aDone - bDone;
+
+    const scoreDiff = getTaskScore(b) - getTaskScore(a);
+    if (scoreDiff !== 0) return scoreDiff;
+
+    const aDue = a.due || '9999-12-31';
+    const bDue = b.due || '9999-12-31';
+    const dueDiff = aDue.localeCompare(bDue);
+    if (dueDiff !== 0) return dueDiff;
+
+    return (b.created || 0) - (a.created || 0);
+  });
+}
 
 // 3. データをFirestoreから取得して画面に描画する関数
 async function renderTasks() {
@@ -42,19 +103,14 @@ async function renderTasks() {
   }
 
   try {
-    // 💡 ユーザーのUIDを含んだ正しいルートに変更！
-    const q = query(
-      collection(db, "users", user.uid, "kadai1"), 
-      orderBy("created", "desc")
-    );
-    const querySnapshot = await getDocs(q);
-    
-    listEl.innerHTML = '';
-    
-    querySnapshot.forEach((docSnap) => {
-      const t = docSnap.data();
-      const docId = docSnap.id; // 👈 Firestoreが自動生成したID (vae6mmwqK1kZ...など)
-
+      const querySnapshot = await getDocs(collection(db, "users", user.uid, "kadai1"));
+      const tasks = querySnapshot.docs.map(docSnap => ({ id: docSnap.id, ...docSnap.data() }));
+      const sortedTasks = sortTasks(tasks);
+      
+      listEl.innerHTML = '';
+      
+      sortedTasks.forEach((t) => {
+        const docId = t.id; // 👈 Firestoreが自動生成したID (vae6mmwqK1kZ...など)
       const li = document.createElement('li');
       li.className = 'task-item' + (t.done ? ' done' : '');
 
@@ -169,6 +225,10 @@ form.addEventListener('submit', e => {
 });
 
 clearBtn.addEventListener('click', () => { form.reset(); });
+sortSelect.addEventListener('change', (e) => {
+  currentSort = e.target.value;
+  renderTasks();
+});
 
 // 最初にデータを読み込む
 import { onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-auth.js";
