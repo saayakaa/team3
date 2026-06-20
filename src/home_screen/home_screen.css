@@ -103,6 +103,53 @@ body {
     box-sizing: border-box; /* はみ出し防止 */
 }
 
+/* 1. タスクが表示される親枠（スクロールの基準となる領域） */
+#taskArea {
+    /* 白枠の固定の高さを指定（中身が増えてもこの高さで固定されます） */
+    height: 240px; 
+    
+    /* 縦方向にはみ出たタスクをスクロール（スライド）できるようにする */
+    overflow-y: auto; 
+    
+    /* 横方向のはみ出しは隠す */
+    overflow-x: hidden; 
+    
+    /* スクロールを滑らかにする（スマホ・iOS対応） */
+    -webkit-overflow-scrolling: touch; 
+    
+    /* デザインの微調整（必要に応じて調整してください） */
+    padding-right: 5px; 
+}
+
+/* 2. タスクリスト全体の余白リセット（隙間をキレイに収める） */
+.home-task-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+/* 3. 各タスクの枠（スライドした時に見やすいよう境界線などをつける場合） */
+.home-task-item {
+    display: flex;
+    align-items: center;
+    padding: 12px 8px;
+    border-bottom: 1px dashed #ffe4e1; /* タスクごとの区切り線（薄いピンク） */
+}
+
+/* （おまけ）スクロールバーのデザインを推しアプリ風に可愛くする */
+#taskArea::-webkit-scrollbar {
+    width: 6px; /* スクロールバーの太さ */
+}
+
+#taskArea::-webkit-scrollbar-track {
+    background: transparent; /* 背景は透明 */
+}
+
+#taskArea::-webkit-scrollbar-thumb {
+    background: #ffb6c1; /* スクロールバーのつまみをピンクに */
+    border-radius: 3px;   /* 丸みをつける */
+}
+
 /* タスク名と期限のコンテナ */
 .home-task-content {
     display: flex;
@@ -146,3 +193,41 @@ body {
     box-shadow: 0 4px 0 #ffc1db;
     cursor: pointer;
 }
+
+/* 課題のチェックボタン（丸型にする） */
+.home-check-btn {
+    /* ボタンのサイズを指定（大きめの丸にする） */
+    width: 26px;
+    height: 26px;
+    
+    /* 正円にする設定 */
+    border-radius: 50%;
+    
+    /* 枠線の設定（推しTaskの雰囲気に合わせた薄いピンク） */
+    border: 2px solid #ffb6c1;
+    background-color: #fff;
+    
+    /* クリックしやすくするための設定 */
+    cursor: pointer;
+    padding: 0;
+    
+    /* タスクのテキストと上下中央で揃えるための配置設定 */
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    
+    /* 中身のマークや色が変わる際のアニメーション */
+    transition: background-color 0.2s, transform 0.1s;
+}
+
+/* ボタンの上にマウスを乗せた時（PCのみ） */
+.home-check-btn:hover {
+    background-color: #ffe4e1; /* ほんのり薄いピンクにする */
+}
+
+/* ボタンを押した瞬間（クリック時）の引っ込む演出 */
+.home-check-btn:active {
+    transform: scale(0.92);
+}
+
+
