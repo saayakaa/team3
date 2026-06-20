@@ -41,22 +41,47 @@ imageInput.addEventListener("change", function () {
     oshiImage.src = imageUrl;
 });
 
-// レベルと経験値処理
+// レベルと経験値処理（ガチ仕様）
 let currentLevel = parseInt(localStorage.getItem("oshi_level")) || 1;
 let currentExp = parseInt(localStorage.getItem("oshi_exp")) || 0;
+const MAX_LEVEL = 50;
 
-function updateLevelDOM() {
-    levelEl.textContent = `Lv.${currentLevel}`;
-    expFillEl.style.width = `${currentExp}%`;
+// 称号システム
+function getTitle(level) {
+    if (level >= 40) return "推しとの絆は銀河級⭐";
+    if (level >= 30) return "推し専属プロデューサー";
+    if (level >= 20) return "推し公認ベストフレンド";
+    if (level >= 10) return "推し専属サポーター";
+    return "駆け出しファン";
 }
 
+// 画面反映（ガチ仕様）
+function updateLevelDOM() {
+    const title = getTitle(currentLevel);
+    const requiredExp = currentLevel * 100; // レベル×100が必要経験値
+    const progress = (currentExp / requiredExp) * 100;
+    
+    levelEl.textContent = `Lv.${currentLevel} | ${title}`;
+    expFillEl.style.width = `${progress}%`;
+}
+
+// 経験値獲得ロジック
 function gainExp(amount) {
-    currentExp += amount;
-    if (currentExp >= 100) {
-        currentLevel += 1;
-        currentExp = currentExp - 100;
-        alert(`🎉 レベルアップ！ Lv.${currentLevel} になりました！`);
+    if (currentLevel >= MAX_LEVEL) {
+        alert("すでに最強のファンです！");
+        return;
     }
+
+    currentExp += amount;
+    let requiredExp = currentLevel * 100;
+
+    if (currentExp >= requiredExp) {
+        currentLevel += 1;
+        currentExp = 0; 
+        const newTitle = getTitle(currentLevel);
+        alert(`🎉 レベルアップ！\nLv.${currentLevel} になりました！\n称号：${newTitle}`);
+    }
+
     localStorage.setItem("oshi_level", currentLevel);
     localStorage.setItem("oshi_exp", currentExp);
     updateLevelDOM();
@@ -76,7 +101,9 @@ async function completeTask(user, id) {
         await updateDoc(taskRef, {
             done: true
         });
-        gainExp(20);
+        const hour = new Date().getHours();
+        const bonus = (hour >= 21 && hour <= 23) ? 1.5 : 1.0;
+        gainExp(Math.floor(20 * bonus));
     } catch (e) {
         console.error("タスクの完了処理に失敗しました:", e);
     }
@@ -101,9 +128,7 @@ function startFirestoreListener(user) {
 
                 const checkBtn = document.createElement("button");
                 checkBtn.className = "home-check-btn";
-                checkBtn.onclick = () => {
-                    completeTask(user, docId);
-                };
+                checkBtn.onclick = () => { completeTask(user, docId); };
 
                 const contentDiv = document.createElement("div");
                 contentDiv.className = "home-task-content";
@@ -130,9 +155,6 @@ function startFirestoreListener(user) {
         } else {
             taskArea.appendChild(ul);
         }
-    }, (error) => {
-        console.error("データ取得エラー:", error);
-        taskArea.innerHTML = `<div class="no-task">データの読み込みに失敗しました</div>`;
     });
 }
 
